@@ -2,10 +2,15 @@
   "name": "ingen",
   "version": "1.0.0",
   "description": "A Static Site Generator, 1% Inspired by Jurrasic Park, 99% Inspired by a yearning for knowledge.",
-  "main": "index.js",
+  "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Jordan Vidrine",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.1",
+    "markdown-it": "^9.1.0",
+    "mustache": "^3.0.3"
+  }
 }
