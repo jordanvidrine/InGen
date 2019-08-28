@@ -14,33 +14,42 @@ async function hbsParser(path) {
 
   // parsing options set in front matter
   optionsArray.splice(optionsArray.indexOf('---\r')+1,optionsArray.lastIndexOf('---\r')-1).forEach(option => {
-    // sets options from what was entered into the Front Matter of the markdown file
-    options[option.split(':')[0]] = option.split(':')[1].replace(/\r/,'').trim()
+    let key = option.split(':')[0]
+    // checks to see if options is a stylesheet or template
+    // will add '.css' or '.html'
+    if (key === 'template') {
+      let value = option.split(':')[1].replace(/\r/,'').trim()
+      options[option.split(':')[0]] = './templates/' + value + '.html'
+    } else {
+      // otherwise define the options literally
+      options[option.split(':')[0]] = option.split(':')[1].replace(/\r/,'').trim()
+    }
   })
 
+  console.log(options)
   // removing front matter from content
   content = content.replace(/(---\r?\n)(.*\r?\n)*(---\r?\n)/g, "");
 
   // rendering MD to html
   content = MarkdownIt.render(content);
 
-  // hard coding options
-  // will be dynamic later
-  options['template'] = './templates/base.html'
-
   // sets the css file link to be relative to the folder the created html file will reside in
   // will duplicate the css file into this folder from node
-  options['stylesheet'] = `./css/${options.style}.css`
 
   // setting view to be the content and any options present from the md file
+  // this contains the data that will be injected into the handlebars template used to
+  // generate the html
   let view = {
     title: options.title,
     content,
-    style: options.stylesheet
+    // save the style to the actual location in the built site directory
+    // will be inserted into the generated html as a stylesheet link
+    style: `./css/${options.style}.css`
   }
 
   // get the template
   let template = await fsPromises.readFile(options.template, 'utf8')
+
   // render the page using the template and the view
   let output = Mustache.render(template, view)
 
