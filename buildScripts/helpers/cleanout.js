@@ -19,12 +19,11 @@ let cleanOut = function(path) {
       }
     }
     fs.rmdirSync(path)
-    console.log(`Deleted: ${path}`)
+    // console.log(`Deleted: ${path}`)
 
 }
 
 let createSiteDir = async function(path) {
-  console.log('here')
   let css = `${path}/assets/css`.replace(/\/+$/,"")
   let img = `${path}/assets/img`.replace(/\/+$/,"")
   let js = `${path}/assets/js`.replace(/\/+$/,"")

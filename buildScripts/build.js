@@ -26,7 +26,6 @@ async function hbsParser(path) {
     }
   })
 
-  console.log(options)
   // removing front matter from content
   content = content.replace(/(---\r?\n)(.*\r?\n)*(---\r?\n)/g, "");
 
