@@ -81,7 +81,7 @@ async function hbsParser(path) {
   let output = Mustache.render(template, view)
 
   // save the rendered output to an html file
-  await fsPromises.writeFile(`_test-site/${view.title}.html`,output, 'utf8')
+  await fsPromises.writeFile(`_test-site/${path.split('/')[path.split('/').length-1].split('.')[0]}.html`,output, 'utf8')
 
   // copy the css stylesheet chosen into the css folder
   await fsPromises.copyFile(`./templates/css/${options.style}.css`, `_test-site/css/${options.style}.css`)
