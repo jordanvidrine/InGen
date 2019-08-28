@@ -3,6 +3,8 @@ const fs = require('fs')
 const fsPromises = fs.promises
 const MarkdownIt = require('markdown-it')();
 
+// resets the character escaping to not escape any chars
+// had issues with handlebars escaping < and > tags in html for some reason
 Mustache.escape = function(text) {return text;};
 
 async function hbsParser(path) {
@@ -22,20 +24,31 @@ async function hbsParser(path) {
   // rendering MD to html
   content = MarkdownIt.render(content);
 
+  // hard coding options
+  // will be dynamic later
+  options['template'] = './templates/base.html'
+
+  // sets the css file link to be relative to the folder the created html file will reside in
+  // will duplicate the css file into this folder from node
+  options['stylesheet'] = `./css/${options.style}.css`
+
   // setting view to be the content and any options present from the md file
   let view = {
     title: options.title,
-    content
+    content,
+    style: options.stylesheet
   }
 
   // get the template
-  let template = await fsPromises.readFile('./_site/handleBars.html', 'utf8')
+  let template = await fsPromises.readFile(options.template, 'utf8')
   // render the page using the template and the view
   let output = Mustache.render(template, view)
 
   // save the rendered output to an html file
   await fsPromises.writeFile(`_test-site/${view.title}.html`,output, 'utf8')
 
+  // copy the css stylesheet chosen into the css folder
+  await fsPromises.copyFile(`./templates/css/${options.style}.css`, `_test-site/css/${options.style}.css`)
 }
 
-hbsParser('./content/handleBars.md')
+hbsParser('./content/index.md')

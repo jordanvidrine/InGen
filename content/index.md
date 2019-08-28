@@ -1,5 +1,7 @@
 ---
 title: Jordan's Page
+style: splendor
+template: base
 ---
 # H1
 ## H2
