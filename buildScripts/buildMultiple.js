@@ -1,6 +1,7 @@
 const Mustache = require('mustache')
 const fs = require('fs')
 const fsPromises = fs.promises
+const path = require('path')
 const MarkdownIt = require('markdown-it')();
 
 const getData = require('./helpers/getData')
@@ -46,4 +47,6 @@ async function hbsParser(path) {
   await fsPromises.copyFile(`./templates/css/${data.options.style}.css`, `_test-site/assets/css/${data.options.style}.css`)
 }
 
- hbsParser('./content/index.md')
+let filePath = path.join(__dirname, '../content') + '/index.md'
+
+hbsParser(filePath)
