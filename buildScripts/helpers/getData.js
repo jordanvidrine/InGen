@@ -9,6 +9,7 @@ async function getData(path) {
   let pageContent = await fsPromises.readFile(path, 'utf8');
   // create array from page content to be able to parse options
   pageContentArray = pageContent.split('\n').map(line => line.replace('\r',''))
+
   let options = {}
 
   // Parses options from md front matter & assigns key/value pairs to options object
