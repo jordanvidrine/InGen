@@ -3,7 +3,7 @@ const path = require('path')
 const app = express()
 const port = 3000 || process.env.port
 
-const sitePath = path.join(__dirname, '../_test-site')
+const sitePath = path.join(__dirname, '../_site')
 
 app.use(express.static(sitePath))
 
