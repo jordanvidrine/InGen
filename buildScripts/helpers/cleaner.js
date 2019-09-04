@@ -7,7 +7,7 @@ let cleanOut = function(path) {
     let dir = fs.readdirSync(path)
 
     for (let i = 0; i < dir.length ; i++) {
-      currentPath = `${path}/${dir[i]}`;
+      let currentPath = `${path}/${dir[i]}`;
       let stats = fs.lstatSync(currentPath);
       let isDirectory = stats.isDirectory()
 
