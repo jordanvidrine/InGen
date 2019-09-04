@@ -4,7 +4,7 @@
   "description": "A Static Site Generator, 1% Inspired by Jurrasic Park, 99% Inspired by a yearning for knowledge.",
   "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "node buildScripts/buildMultiple.js"
   },
   "author": "Jordan Vidrine",
   "license": "ISC",
