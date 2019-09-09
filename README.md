@@ -8,5 +8,8 @@ Here is my attempt.
 ### In Progress
 - Dynamic saving of images used in markdown files and templates
 - Implement dev server to dynamically watch file edits
+- Implement build to save MD post files to their respective location inside of site
+  - example: /site/posts/8/8-1-19-Blog-Post-Title.html
+- (DONE!) Implement ability to add posts from a post directory to the site
 - (DONE!) Separate getting page data from getting sections as they are independent of one another
 - (DONE!) Creation of multiple .html files at once
