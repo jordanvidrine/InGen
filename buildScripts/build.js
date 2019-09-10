@@ -4,9 +4,10 @@ const fsPromises = fs.promises
 const path = require('path')
 const MarkdownIt = require('markdown-it')();
 
-const { getSectionContent, getPageContent, getPosts } = require('./helpers/content')
-const { cleanOut, createSiteDir } = require('./helpers/cleaner')
-const assemblePages = require('./helpers/assembly')
+const { getSectionContent, getPosts } = require('./helpers/content')
+const {buildSkeleton} = require('./helpers/copyAssets')
+const {cleanOut} = require('./helpers/cleaner')
+const {assemblePages, savePosts} = require('./helpers/assembly')
 
 // resets the character escaping to not escape any chars
 // had issues with handlebars escaping '<' and '>' tags in html for some reason
@@ -15,16 +16,10 @@ Mustache.escape = function(text) {return text;};
 async function build(dirPath) {
 
   try {
-    // reads the content of the directory build is called on
     let dirContent = fs.readdirSync(dirPath)
-
-    // this array will hold the markdown files to be rendered
     let filesToRender = [];
 
-    let sections = await getSectionContent();
-    let posts = await getPosts();
-
-    // loop over directory content to add .md files to filesToRender array
+    // loop over content to add .md files to filesToRender array
     for (let i = 0; i < dirContent.length ; i++) {
       let isMarkDown = /(.md)$/.test(dirContent[i])
       if (isMarkDown) {
@@ -32,25 +27,19 @@ async function build(dirPath) {
       }
     }
 
-    let pages = await assemblePages(filesToRender, sections, posts)
+    let pages = await assemblePages(filesToRender)
 
-    // clear _site and recreate it
-    if (fs.existsSync('./_site')) {
-      cleanOut('./_site')
-    }
-    await createSiteDir('./_site')
+    await buildSkeleton();
 
     // loop over pages and save the output of each to an html file
-    // as well as saves a css file for each one used
     for (let k = 0; k < pages.length; k++) {
-      // save the rendered output to an html file
-      await fsPromises.writeFile(pages[k].filePath, pages[k].output, 'utf8')
-      let cssDir = fs.readdirSync(`./_site/assets/css`)
-      // only copy css files if they are not already in the _site/assets/css dir
-      if (!cssDir.includes(`${pages[k].stylesheet}.css`)) {
-        await fsPromises.copyFile(`./templates/css/${pages[k].stylesheet}.css`, `_site/assets/css/${pages[k].stylesheet}.css`)
-      }
+      fs.writeFile(pages[k].filePath, pages[k].output, (err) => {
+        if (err) throw err;
+        console.log('File written')
+      })
     }
+
+    //await savePosts()
 
     // loop over posts and save the output to _site/_posts folder dependent on month created
     // for (let l = 0; l < posts.length; l++) {

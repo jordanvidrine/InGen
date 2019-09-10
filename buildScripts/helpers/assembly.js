@@ -4,7 +4,10 @@ const fsPromises = fs.promises
 
 const { getSectionContent, getPageContent, getPosts } = require('./content')
 
-let assemblePages = async function(filesToRender, sections, posts) {
+let assemblePages = async function(filesToRender) {
+
+  let sections = await getSectionContent();
+  let posts = await getPosts();
 
   let pagesArray = [];
 
@@ -29,7 +32,7 @@ let assemblePages = async function(filesToRender, sections, posts) {
         style: `./assets/css/${page.options.style}.css`
       }
     }
-    
+
     let template = await fsPromises.readFile(page.options.template, 'utf8');
 
     let fileName = filesToRender[i].split('/')[filesToRender[i].split('/').length-1].split('.')[0]+ '.html';
@@ -44,4 +47,8 @@ let assemblePages = async function(filesToRender, sections, posts) {
   return pagesArray
 }
 
-module.exports = assemblePages
+async function savePosts() {
+
+}
+
+module.exports = {assemblePages, savePosts}

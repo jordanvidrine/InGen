@@ -1,9 +1,7 @@
 const MarkdownIt = require('markdown-it')()
 const fsPromises = require('fs').promises
 
-
-// This script will look at all of the MD files in /content/sections
-// and return an object containing section titles as keys, and their corresponding
+// returns an object containing section titles as keys, and their corresponding
 // rendered markdown to html text
 async function getSectionContent () {
   let sectionContent = {};
@@ -74,10 +72,7 @@ async function getPosts() {
   return postsContent
 }
 
-getPosts()
-
 async function getPageContent(path) {
-
   let content = await fsPromises.readFile(path, 'utf8');
   // create array from page content to be able to parse options (strips whitespace)
   contentArray = content.split('\n').map(line => line.replace('\r',''))
@@ -108,10 +103,8 @@ async function getPageContent(path) {
   }
 }
 
-getPosts()
-
 module.exports = {
   getSectionContent,
   getPageContent,
-  getPosts
+  getPosts,
 }

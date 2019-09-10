@@ -23,18 +23,4 @@ let cleanOut = function(path) {
 
 }
 
-let createSiteDir = async function(path) {
-  let css = `${path}/assets/css`.replace(/\/+$/,"")
-  let img = `${path}/assets/img`.replace(/\/+$/,"")
-  let js = `${path}/assets/js`.replace(/\/+$/,"")
-
-  try {
-    await fsPromises.mkdir(css, {recursive:true})
-    await fsPromises.mkdir(img, {recursive:true})
-    await fsPromises.mkdir(js, {recursive:true})
-  } catch (e) {
-    console.log(e)
-  }
-}
-
-module.exports = { cleanOut, createSiteDir }
+module.exports = {cleanOut}
