@@ -1,8 +1,7 @@
-const MarkdownIt = require('markdown-it')();
+const MarkdownIt = require('markdown-it')()
 const fsPromises = require('fs').promises
 
-// This script will look at all of the MD files in /content/sections
-// and return an object containing section titles as keys, and their corresponding
+// returns an object containing section titles as keys, and their corresponding
 // rendered markdown to html text
 async function getSectionContent () {
   let sectionContent = {};
@@ -28,8 +27,52 @@ async function getSectionContent () {
   }
 }
 
-async function getPageContent(path) {
+async function getPosts() {
+  let postsContent = [];
+  try {
+    let posts = await fsPromises.readdir('./content/posts');
 
+    // renders markdown into html and stores it to the postsContent object
+    // will also need to save to individual html files for pages that show singular
+    // posts
+    for (let i = 0; i < posts.length; i++) {
+      let postContent = await fsPromises.readFile(`./content/posts/${posts[i]}`, 'utf8')
+
+      // parse options and store to an object
+      let dataArray = postContent.split('\n').map(line => line.replace('\r',''))
+      let postData = {}
+      dataArray.splice(dataArray.indexOf('---')+1,dataArray.lastIndexOf('---')-1).forEach(data => {
+        let key = data.split(':')[0]
+        postData[key] = data.split(':')[1].trim()
+      })
+      // removing front matter from content
+      postContent = postContent.replace(/(---\r?\n)(.*\r?\n)*(---\r?\n)/, "");
+      // render to html
+      postContent = MarkdownIt.render(postContent)
+
+      let year = postData.date.split('-')[postData.date.split('-').length-1]
+      let month = postData.date.split('-')[0]
+
+      let fileName = `/posts/${year}/${month}/${postData.date}-${postData.title.replace(" ", "-")}.html`
+
+      postData = {...postData, fileName}
+
+      // replace posts that contain readmore with the link to the main post
+      shortenedContent = postContent.replace(/(&lt;!--read more--&gt;)([\w\d\s\W\D\S])*/g,`<a href="${fileName}">Read more!</a>`)
+
+      postsContent.push({
+        content: shortenedContent,
+        fullContent: postContent.replace(/(\n?\r?)(<p>)(&lt;!--read more--&gt;\n?\r?)(<\/p>)(\n?\r?)*/g,''),
+        data: postData
+      })
+    }
+  } catch (e) {
+    console.log(e)
+  }
+  return postsContent
+}
+
+async function getPageContent(path) {
   let content = await fsPromises.readFile(path, 'utf8');
   // create array from page content to be able to parse options (strips whitespace)
   contentArray = content.split('\n').map(line => line.replace('\r',''))
@@ -62,5 +105,6 @@ async function getPageContent(path) {
 
 module.exports = {
   getSectionContent,
-  getPageContent
+  getPageContent,
+  getPosts,
 }
