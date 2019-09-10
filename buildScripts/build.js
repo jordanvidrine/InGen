@@ -1,12 +1,12 @@
 const Mustache = require('mustache')
 const fs = require('fs')
+const fsExtra = require('fs-extra')
 const fsPromises = fs.promises
 const path = require('path')
 const MarkdownIt = require('markdown-it')();
 
 const { getSectionContent, getPosts } = require('./helpers/content')
 const {buildSkeleton} = require('./helpers/copyAssets')
-const {cleanOut} = require('./helpers/cleaner')
 const {assemblePages, savePosts} = require('./helpers/assembly')
 
 // resets the character escaping to not escape any chars
@@ -29,14 +29,13 @@ async function build(dirPath) {
 
     let pages = await assemblePages(filesToRender)
 
+    await fsExtra.emptyDir('./_site');
+
     await buildSkeleton();
 
     // loop over pages and save the output of each to an html file
     for (let k = 0; k < pages.length; k++) {
-      fs.writeFile(pages[k].filePath, pages[k].output, (err) => {
-        if (err) throw err;
-        console.log('File written')
-      })
+      await fsPromises.writeFile(pages[k].filePath, pages[k].output, {flag:'w+'})
     }
 
     //await savePosts()
