@@ -51,9 +51,10 @@ let assemblePages = async function(filesToRender) {
 async function savePosts() {
   let posts = await getPosts();
   let template = await fs.readFileSync('./templates/post.html', 'utf8')
+  let partials = await getPartials();
 
   for (post of posts) {
-    let output = Mustache.render(template,{content: post.fullContent, data: post.data})
+    let output = Mustache.render(template,{content: post.fullContent, data: post.data}, partials)
     await fs.outputFile(post.data.fileName, output, {flag:'w+'})
   }
 }

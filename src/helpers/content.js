@@ -71,7 +71,7 @@ async function getPosts() {
       postData = {...postData, fileName}
 
       // replace posts that contain readmore with the link to the main post
-      shortenedContent = postContent.replace(/(&lt;!--read more--&gt;)([\w\d\s\W\D\S])*/g,`<a href="${fileName}">Read more!</a>`)
+      shortenedContent = postContent.replace(/(&lt;!--read more--&gt;)([\w\d\s\W\D\S])*/g,`<a href="./${year}/${month}/${postData.date}-${postData.title.replace(" ", "-")}.html">Read more!</a>`)
 
       postsContent.push({
         content: shortenedContent,
