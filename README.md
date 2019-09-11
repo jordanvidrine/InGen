@@ -6,7 +6,8 @@ I started reading Jurassic Park last night, and today I will start building this
 Here is my attempt.
 
 ### TODOS
-- (DONE!) Implement build to save MD post files to their respective location inside of site
+- (DONE!)
+  Implement build to save MD post files to their respective location inside of site
   - example: /site/posts/8/8-1-19-Blog-Post-Title.html
 - (DONE!) Implement dev server to dynamically watch file edits
 - (DONE!) Copy assets folder from content to site
