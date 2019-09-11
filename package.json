@@ -4,8 +4,8 @@
   "description": "A Static Site Generator, 1% Inspired by Jurrasic Park, 99% Inspired by a yearning for knowledge.",
   "main": "app.js",
   "scripts": {
-    "build": "node buildScripts/build.js",
-    "server": "node server/server.js",
+    "build": "nodemon -e md,html,js,css --watch src --watch content --watch templates src/build.js",
+    "server": "node src/server.js",
     "build-serve": "npm run build && npm run server"
   },
   "author": "Jordan Vidrine",
@@ -14,10 +14,9 @@
     "express": "^4.17.1",
     "fs-extra": "^8.1.0",
     "markdown-it": "^9.1.0",
-    "mustache": "^3.0.3"
+    "mustache": "^3.0.3",
+    "nodemon": "^1.19.2"
   },
   "repository": "https://github.com/jordanvidrine/InGen.git",
-  "devDependencies": {
-    "watch": "^1.0.2"
-  }
+  "devDependencies": {}
 }
