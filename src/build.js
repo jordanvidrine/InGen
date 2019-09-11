@@ -33,16 +33,13 @@ async function build(dirPath) {
 
     // loop over pages and save the output of each to an html file
     for (let page of pages) {
+      // save blog page to blog/index.html
+      if (page.filePath === './_site/blog.html') page.filePath = './_site/blog/index.html'
       await fs.outputFile(page.filePath, page.output, {flag:'w+'})
     }
 
-    //await savePosts()
-
-    // loop over posts and save the output to _site/_posts folder dependent on month created
-    // for (let l = 0; l < posts.length; l++) {
-    //   await fsPromises.writeFile()
-    // }
-    // console.log(posts)
+    // save posts to the _site/blog folder in corresponding locations
+    await savePosts()
 
   } catch (e) {
     console.log(e)

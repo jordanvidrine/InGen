@@ -1,12 +1,14 @@
 const Mustache = require('mustache')
 const fs = require('fs-extra')
 
-const { getSectionContent, getPageContent, getPosts } = require('./content')
+const { getSectionContent, getPageContent, getPosts, getPartials } = require('./content')
+Mustache.escape = function(text) {return text;};
 
 let assemblePages = async function(filesToRender) {
 
   let sections = await getSectionContent();
   let posts = await getPosts();
+  let partials = await getPartials();
 
   let pagesArray = [];
 
@@ -31,13 +33,13 @@ let assemblePages = async function(filesToRender) {
         style: `./assets/css/${page.options.style}.css`
       }
     }
-    
+
     let template = await fs.readFileSync(page.options.template, 'utf8');
 
     let fileName = file.split('/')[file.split('/').length-1].split('.')[0]+ '.html';
 
     let filePath = `./_site/${fileName}`
-    let output = Mustache.render(template,{...view, sections})
+    let output = Mustache.render(template,{...view, sections}, partials)
 
     pagesArray.push({
       output, filePath,"stylesheet" : page.options.style,
@@ -47,7 +49,13 @@ let assemblePages = async function(filesToRender) {
 }
 
 async function savePosts() {
+  let posts = await getPosts();
+  let template = await fs.readFileSync('./templates/post.html', 'utf8')
 
+  for (post of posts) {
+    let output = Mustache.render(template,{content: post.fullContent, data: post.data})
+    await fs.outputFile(post.data.fileName, output, {flag:'w+'})
+  }
 }
 
 module.exports = {assemblePages, savePosts}

@@ -27,6 +27,19 @@ async function getSectionContent () {
   }
 }
 
+async function getPartials() {
+  let partials = await fs.readdirSync('./templates/partials');
+  let partialsData = {}
+
+  for (template of partials) {
+    let path = './templates/partials/' + template
+    let partialName = template.split('.')[0]
+    let partialContent = await fs.readFileSync(path, 'utf8')
+    partialsData[partialName] = partialContent;
+  }
+  return partialsData
+}
+
 async function getPosts() {
   let postsContent = [];
   try {
@@ -53,7 +66,7 @@ async function getPosts() {
       let year = postData.date.split('-')[postData.date.split('-').length-1]
       let month = postData.date.split('-')[0]
 
-      let fileName = `/posts/${year}/${month}/${postData.date}-${postData.title.replace(" ", "-")}.html`
+      let fileName = `./_site/blog/${year}/${month}/${postData.date}-${postData.title.replace(" ", "-")}.html`
 
       postData = {...postData, fileName}
 
@@ -111,4 +124,5 @@ module.exports = {
   getSectionContent,
   getPageContent,
   getPosts,
+  getPartials
 }
