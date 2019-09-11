@@ -5,8 +5,6 @@
   "main": "app.js",
   "scripts": {
     "build": "nodemon -e md,html,js,css --watch src --watch content --watch templates src/build.js",
-    "server": "node src/server.js",
-    "build-serve": "npm run build && npm run server"
   },
   "author": "Jordan Vidrine",
   "license": "ISC",
