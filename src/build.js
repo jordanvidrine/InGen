@@ -4,6 +4,7 @@ const fsExtra = require('fs-extra')
 const fsPromises = fs.promises
 const path = require('path')
 const MarkdownIt = require('markdown-it')();
+const server = require('./server')
 
 const { getSectionContent, getPosts } = require('./helpers/content')
 const {buildSkeleton} = require('./helpers/copyAssets')
