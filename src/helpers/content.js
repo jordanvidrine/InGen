@@ -93,6 +93,10 @@ async function getPageContent(path) {
     }
   })
 
+  // sets necessary defaults if user does not specify in md file
+  if (!options.template) options.template = './templates/base.html'
+  if (!options.style) options.style = `splendor`
+
   // removing front matter from content
   content = content.replace(/(---\r?\n)(.*\r?\n)*(---\r?\n)/g, "");
   // rendering MD to html
