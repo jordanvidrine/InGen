@@ -1,13 +1,10 @@
 const Mustache = require('mustache')
-const fs = require('fs')
-const fsExtra = require('fs-extra')
-const fsPromises = fs.promises
+const fs = require('fs-extra')
 const path = require('path')
 const MarkdownIt = require('markdown-it')();
 const server = require('./server')
 
-const { getSectionContent, getPosts } = require('./helpers/content')
-const {buildSkeleton} = require('./helpers/copyAssets')
+const skeleton = require('./helpers/skeleton')
 const {assemblePages, savePosts} = require('./helpers/assembly')
 
 // resets the character escaping to not escape any chars
@@ -21,22 +18,22 @@ async function build(dirPath) {
     let filesToRender = [];
 
     // loop over content to add .md files to filesToRender array
-    for (let i = 0; i < dirContent.length ; i++) {
-      let isMarkDown = /(.md)$/.test(dirContent[i])
+    for (let file of dirContent) {
+      let isMarkDown = /(.md)$/.test(file)
       if (isMarkDown) {
-        filesToRender.push(`${dirPath}/${dirContent[i]}`)
+        filesToRender.push(`${dirPath}/${file}`)
       }
     }
 
     let pages = await assemblePages(filesToRender)
 
-    await fsExtra.emptyDir('./_site');
+    await fs.emptyDir('./_site');
 
-    await buildSkeleton();
+    await skeleton();
 
     // loop over pages and save the output of each to an html file
-    for (let k = 0; k < pages.length; k++) {
-      await fsPromises.writeFile(pages[k].filePath, pages[k].output, {flag:'w+'})
+    for (let page of pages) {
+      await fs.outputFile(page.filePath, page.output, {flag:'w+'})
     }
 
     //await savePosts()

@@ -1,6 +1,5 @@
 const Mustache = require('mustache')
-const fs = require('fs')
-const fsPromises = fs.promises
+const fs = require('fs-extra')
 
 const { getSectionContent, getPageContent, getPosts } = require('./content')
 
@@ -33,7 +32,7 @@ let assemblePages = async function(filesToRender) {
       }
     }
 
-    let template = await fsPromises.readFile(page.options.template, 'utf8');
+    let template = await fs.readFileSync(page.options.template, 'utf8');
 
     let fileName = filesToRender[i].split('/')[filesToRender[i].split('/').length-1].split('.')[0]+ '.html';
 

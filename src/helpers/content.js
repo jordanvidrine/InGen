@@ -1,19 +1,19 @@
 const MarkdownIt = require('markdown-it')()
-const fsPromises = require('fs').promises
+const fs = require('fs-extra')
 
 // returns an object containing section titles as keys, and their corresponding
 // rendered markdown to html text
 async function getSectionContent () {
   let sectionContent = {};
   try {
-    let sections = await fsPromises.readdir('./content/sections');
+    let sections = await fs.readdirSync('./content/sections');
 
     // renders markdown into html files and stores them to sectionContent object
     for (let i = 0; i < sections.length; i++) {
 
       // only render files ending in .md
       if (/(.md)$/.test(sections[i])) {
-        let rawContent = await fsPromises.readFile(`./content/sections/${sections[i]}`, 'utf8')
+        let rawContent = await fs.readFileSync(`./content/sections/${sections[i]}`, 'utf8')
         let renderedContent = MarkdownIt.render(rawContent)
         let html = '<section>' + renderedContent + '</section>'
         sectionContent[`${sections[i].split('.')[0]}`] = html;
@@ -30,13 +30,13 @@ async function getSectionContent () {
 async function getPosts() {
   let postsContent = [];
   try {
-    let posts = await fsPromises.readdir('./content/posts');
+    let posts = await fs.readdirSync('./content/posts');
 
     // renders markdown into html and stores it to the postsContent object
     // will also need to save to individual html files for pages that show singular
     // posts
     for (let i = 0; i < posts.length; i++) {
-      let postContent = await fsPromises.readFile(`./content/posts/${posts[i]}`, 'utf8')
+      let postContent = await fs.readFileSync(`./content/posts/${posts[i]}`, 'utf8')
 
       // parse options and store to an object
       let dataArray = postContent.split('\n').map(line => line.replace('\r',''))
@@ -73,7 +73,7 @@ async function getPosts() {
 }
 
 async function getPageContent(path) {
-  let content = await fsPromises.readFile(path, 'utf8');
+  let content = await fs.readFileSync(path, 'utf8');
   // create array from page content to be able to parse options (strips whitespace)
   contentArray = content.split('\n').map(line => line.replace('\r',''))
 
