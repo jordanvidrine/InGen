@@ -58,6 +58,8 @@ If everything worked properly, navigate to `localhost:3000` and you should see t
 
 _**More Documentation to come soon**_
 
+I will explain how to use `.md` files created in `content/posts` in tandem with Mustache templating to render a blog page.
+
 #### TODOS
 - **Implement pagination on blog/index.html**
 - (DONE!) Implement build to save MD post files to their respective location inside of site
