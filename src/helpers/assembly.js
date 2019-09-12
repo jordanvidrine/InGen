@@ -19,12 +19,13 @@ let assemblePages = async function(filesToRender) {
     let page = await getPageContent(file)
     // if page had blog option set to true, add correct number of posts to the view
     if (page.options.blog) {
-      let maxPosts = page.options.maxPosts || 5
+      let maxPosts = page.options.maxPosts
       view = {
         title: page.options.title,
         content: page.content,
         style: `./assets/css/${page.options.style}.css`,
-        posts: Array.from(posts).splice(0,maxPosts)
+        // if maxPosts doesnt exist, render all blog posts
+        posts:  maxPosts ? Array.from(posts).splice(0,maxPosts) : posts
       }
     } else {
       view = {

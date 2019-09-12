@@ -1,4 +1,12 @@
+#ignore
 node_modules
-app.js
 _site
-_test-site
+content/assets/*/*
+content/posts/*
+content/sections/*
+content/*.md
+templates/*/*
+templates/*
+
+#allow as an example
+!/templates/base.html
