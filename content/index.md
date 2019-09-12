@@ -1,8 +1,8 @@
 ---
-title: Jordan's Page
+title: My First Ingen Page
 style: splendor
 template: base
 ---
-New content
 
-check out my [blog](/blog)
+# My First InGen Page
+Welcome to my first page created with Jordan Vidrine's InGen static site generator!

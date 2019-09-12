@@ -10,3 +10,4 @@ templates/*
 
 #allow as an example
 !/templates/base.html
+!/content/assets/css/*

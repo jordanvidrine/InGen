@@ -6,19 +6,6 @@
     <link rel="stylesheet" href='{{style}}'>
   </head>
   <body>
-    {{> nav}}
-    {{sections.about}}
     {{content}}
-    <div class='posts'>
-      {{#posts}}
-        <div class="post">
-          <h2>{{data.title}}</h2>
-          <p style="fontSize:10px">Written on {{data.date}}</p>
-          <div class='post-content'>
-            {{content}}
-          </div>
-        </div>
-      {{/posts}}
-    </div>
   </body>
 </html>
