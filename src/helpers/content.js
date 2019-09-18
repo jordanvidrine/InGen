@@ -5,18 +5,19 @@ const fs = require('fs-extra')
 // rendered markdown to html text
 async function getSectionContent () {
   let sectionContent = {};
+
   try {
     let sections = await fs.readdirSync('./content/sections');
 
     // renders markdown into html files and stores them to sectionContent object
-    for (let i = 0; i < sections.length; i++) {
+    for (let section of sections) {
 
       // only render files ending in .md
-      if (/(.md)$/.test(sections[i])) {
-        let rawContent = await fs.readFileSync(`./content/sections/${sections[i]}`, 'utf8')
+      if (/(.md)$/.test(section)) {
+        let rawContent = await fs.readFileSync(`./content/sections/${section}`, 'utf8')
         let renderedContent = MarkdownIt.render(rawContent)
         let html = '<section>' + renderedContent + '</section>'
-        sectionContent[`${sections[i].split('.')[0]}`] = html;
+        sectionContent[`${section.split('.')[0]}`] = html;
       }
     }
 
@@ -31,12 +32,13 @@ async function getPartials() {
   let partials = await fs.readdirSync('./templates/partials');
   let partialsData = {}
 
-  for (template of partials) {
+  for (let template of partials) {
     let path = './templates/partials/' + template
     let partialName = template.split('.')[0]
     let partialContent = await fs.readFileSync(path, 'utf8')
     partialsData[partialName] = partialContent;
   }
+
   return partialsData
 }
 
@@ -48,8 +50,8 @@ async function getPosts() {
     // renders markdown into html and stores it to the postsContent object
     // will also need to save to individual html files for pages that show singular
     // posts
-    for (let i = 0; i < posts.length; i++) {
-      let postContent = await fs.readFileSync(`./content/posts/${posts[i]}`, 'utf8')
+    for (let post of posts) {
+      let postContent = await fs.readFileSync(`./content/posts/${post}`, 'utf8')
 
       // parse options and store to an object
       let dataArray = postContent.split('\n').map(line => line.replace('\r',''))
