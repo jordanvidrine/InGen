@@ -4,3 +4,4 @@ blog: true
 template: blog
 style: splendor
 ---
+# Jordan's Thoughts

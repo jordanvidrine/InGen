@@ -5,7 +5,7 @@ const server = require('./server')
 const skeleton = require('./helpers/skeleton')
 const assemblePages = require('./helpers/assemblePages')
 const savePosts = require('./helpers/savePosts')
-const buildBlog = require('./helpers/buildBlog')
+const assembleBlog = require('./helpers/assembleBlog')
 
 async function build(dirPath) {
 
@@ -37,8 +37,9 @@ async function build(dirPath) {
       await fs.outputFile(page.filePath, page.output, {flag:'w+'})
     }
 
+    // if the blog page existed, build it
     if (blog) {
-      await buildBlog(blog)
+      await assembleBlog(blog)
     }
 
     // save posts to the _site/blog folder in corresponding locations

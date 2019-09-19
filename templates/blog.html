@@ -6,11 +6,10 @@
     <link rel="stylesheet" href='.{{style}}'>
   </head>
   <body>
-    <div class="nav">
-      <a href="../index.html">Home</a>
-    </div>
+      {{> nav}}
+      {{{content}}}
     <div class='posts'>
-      {{#paginate posts num="2"}}
+      {{#paginate posts}}
         <div class="post">
           <h2>{{data.title}}</h2>
           <p style="fontSize:10px">Written on {{data.date}}</p>

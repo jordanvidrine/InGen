@@ -6,5 +6,4 @@ blog: true
 maxPosts: 2
 ---
 
-# My First Page
-Welcome to my first page created with Jordan Vidrine's InGen static site generator!
+# Jordan's Page

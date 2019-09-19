@@ -1,4 +1,3 @@
-const Mustache = require('mustache')
 const Handlebars = require('handlebars')
 const fs = require('fs-extra')
 

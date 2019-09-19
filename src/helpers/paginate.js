@@ -2,51 +2,64 @@ const fs = require('fs-extra')
 
 function paginate(posts, options) {
 
-  let maxPosts = parseInt(options.hash.num) || 2
+  let maxPosts = parseInt(options.hash.num) || 3
   let count = 1;
   let totalPosts = 1;
   let page = 1;
   let mainHtml = '';
-  let firstPageBuilt = false;
+  let blogIndexCreated = false;
+  // will be an array of rendered Html to use to save individual pages
   let pageHtml = [];
 
   for (let post of posts) {
 
     // builds first 'blog page'
-    if (!firstPageBuilt) {
-
+    if (!blogIndexCreated) {
       if (count < maxPosts) {
         mainHtml = mainHtml + options.fn(post)
         count++
         totalPosts++
-
+        // once count reaches maxPosts, add the pagination link and set
+        // blogIndexCreated to true
       } else if (count === maxPosts) {
-          mainHtml = mainHtml + options.fn(post) + `<span id="next-page"><a href="./page/${page+1}.html"/>Next Page</a></span>`;
-          firstPageBuilt = true;
-          count = 1;
-          totalPosts++
-          page++
+        mainHtml = mainHtml + options.fn(post) + `<span id="next-page"><a href="./page/${page+1}.html"/>Next Page</a></span>`;
+        blogIndexCreated = true;
+        count = 1;
+        totalPosts++
+        page++
+        // if posts count equals the amount of posts before reaching
+        // maxposts amount, the page is finished being created and does
+        // not need a pagination link
+      } else if (totalPosts === posts.length) {
+        mainHtml = mainHtml + options.fn(post);
       }
 
+      // builds remaining blog pages from posts left after building index
     } else {
-      // once first blog page is built, will use remaining posts to create and save pages, dependent on amount set per page.
       if (count < maxPosts && totalPosts < posts.length) {
-        pageHtml[page-2] == undefined ? pageHtml[page-2] = options.fn(post) : pageHtml[page-2] = pageHtml[page-2] + options.fn(post)
+        // accounts for the first pass of adding html to the page
+        pageHtml[page-2] == undefined ?
+        pageHtml[page-2] = options.fn(post) :
+        // if this is not the first pass, continue to add posts to pageHtml
+        pageHtml[page-2] = pageHtml[page-2] + options.fn(post)
+
         count++
         totalPosts++
 
-      // if the is the last post of the page, but more pages are going to be built
-      } else if (count === maxPosts) {
-        // this takes care of injecting 'undefined' into the html
-        // this only happens if maxPosts was set to 1
+      // when last post of the page but more pages are going to be built
+      } else if (count === maxPosts && totalPosts < posts.length) {
         let prevPage = '';
 
-        // inserts appropriate 'previous page' link depending on page/post count
+        // if this is the second page of the blog, use 'index' as the previous
+        // page, as there is no '1.html'
         if (page-1 === 1) {
           prevPage = `<span id="prev-page"><a href="../index.html"/>Prev Page</a></span>`
         } else {
           prevPage = `<span id="prev-page"><a href="./${page-1}.html"/>Prev Page</a></span>`
         }
+
+        // this if statement is for a setting of maxposts to 1
+        // if thats the case, this would be the first pass
         if (!pageHtml[page-2]) pageHtml[page-2] = ''
           pageHtml[page-2] = pageHtml[page-2] + options.fn(post) + prevPage + `<span id="next-page"><a href="./${page+1}.html"/>Next Page</a></span>`;
 
@@ -104,7 +117,6 @@ function paginate(posts, options) {
       }
     }
   }
-
   return mainHtml;
 }
 

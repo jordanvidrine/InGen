@@ -3,9 +3,10 @@ const fs = require('fs-extra')
 const {getPosts, getPageContent, getPartials} = require('./content')
 const Handlebars = require('handlebars')
 
+// this will run when Handlebars renders the page
 Handlebars.registerHelper("paginate", paginate)
 
-async function buildBlog() {
+async function assembleBlog() {
   let blog = await getPageContent('./content/blog.md')
   let posts = await getPosts()
   let partials = await getPartials();
@@ -29,6 +30,6 @@ async function buildBlog() {
   await fs.outputFile('./_site/blog/index.html', output, {flag: 'w+'})
 }
 
-buildBlog();
+assembleBlog()
 
-module.exports = buildBlog
+module.exports = assembleBlog
