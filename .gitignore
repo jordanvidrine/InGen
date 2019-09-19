@@ -10,4 +10,5 @@ templates/*
 
 #allow as an example
 !/templates/base.html
+!/templates/blog.html
 !/content/assets/css/*
