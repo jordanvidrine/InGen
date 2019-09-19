@@ -1,27 +1,26 @@
-const Mustache = require('mustache')
 const fs = require('fs-extra')
 const path = require('path')
-const MarkdownIt = require('markdown-it')();
 const server = require('./server')
 
 const skeleton = require('./helpers/skeleton')
-const {assemblePages, savePosts} = require('./helpers/assembly')
-
-// resets the character escaping to not escape any chars
-// had issues with handlebars escaping '<' and '>' tags in html for some reason
-Mustache.escape = function(text) {return text;};
+const assemblePages = require('./helpers/assemblePages')
+const savePosts = require('./helpers/savePosts')
+const buildBlog = require('./helpers/buildBlog')
 
 async function build(dirPath) {
 
   try {
     let dirContent = fs.readdirSync(dirPath)
     let filesToRender = [];
+    let blog = null;
 
     // loop over content to add .md files to filesToRender array
     for (let file of dirContent) {
       let isMarkDown = /(.md)$/.test(file)
       if (isMarkDown) {
-        filesToRender.push(`${dirPath}/${file}`)
+        // if it is the blog page, do not add it to filesToRender, blog will render separately
+        if (file !== 'blog.md') filesToRender.push(`${dirPath}/${file}`)
+        else blog = file;
       }
     }
 
@@ -36,6 +35,10 @@ async function build(dirPath) {
       // save blog page to blog/index.html
       if (page.filePath === './_site/blog.html') page.filePath = './_site/blog/index.html'
       await fs.outputFile(page.filePath, page.output, {flag:'w+'})
+    }
+
+    if (blog) {
+      await buildBlog(blog)
     }
 
     // save posts to the _site/blog folder in corresponding locations

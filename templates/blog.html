@@ -10,15 +10,15 @@
       <a href="../index.html">Home</a>
     </div>
     <div class='posts'>
-      {{#posts}}
+      {{#paginate posts num="2"}}
         <div class="post">
           <h2>{{data.title}}</h2>
           <p style="fontSize:10px">Written on {{data.date}}</p>
           <div class='post-content'>
-            {{content}}
+            {{{content}}}
           </div>
         </div>
-      {{/posts}}
+      {{/paginate}}
     </div>
   </body>
 </html>

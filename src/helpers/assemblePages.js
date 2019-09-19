@@ -1,8 +1,7 @@
-const Mustache = require('mustache')
+const Handlebars = require('handlebars')
 const fs = require('fs-extra')
 
 const { getSectionContent, getPageContent, getPosts, getPartials } = require('./content')
-Mustache.escape = function(text) {return text;};
 
 async function assemblePages(filesToRender) {
 
@@ -37,11 +36,16 @@ async function assemblePages(filesToRender) {
     }
 
     let template = await fs.readFileSync(page.options.template, 'utf8');
+    template = Handlebars.compile(template)
 
     let fileName = file.split('/')[file.split('/').length-1].split('.')[0] + '.html';
-
     let filePath = `./_site/${fileName}`
-    let output = Mustache.render(template,{...view, sections}, partials)
+
+    for (let partial in partials) {
+      Handlebars.registerPartial(partial, partials[partial])
+    }
+
+    let output = template({...view, sections})
 
     pagesArray.push({
       output, filePath, "stylesheet" : page.options.style,
@@ -50,17 +54,4 @@ async function assemblePages(filesToRender) {
   return pagesArray
 }
 
-async function savePosts() {
-
-  let posts = await getPosts();
-  let template = await fs.readFileSync('./templates/post.html', 'utf8')
-  let partials = await getPartials();
-
-  for (post of posts) {
-    let output = Mustache.render(template,{content: post.fullContent, data: post.data}, partials)
-    await fs.outputFile(post.data.fileName, output, {flag:'w+'})
-  }
-
-}
-
-module.exports = {assemblePages, savePosts}
+module.exports = assemblePages
