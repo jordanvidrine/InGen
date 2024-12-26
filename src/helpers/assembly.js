@@ -73,6 +73,7 @@ async function savePosts() {
       partials
     );
     await fs.outputFile(post.data.fileName, output, { flag: "w+" });
+    console.log(`Blog post saved to ${post.data.fileName}`);
   }
 }
 

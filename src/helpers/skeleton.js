@@ -19,6 +19,7 @@ module.exports = skeleton = async function () {
       let copy = `${_sitePath}/${folder}/${file}`;
       let original = `${contentPath}/${folder}/${file}`;
       await fs.copy(original, copy);
+      console.log(`Copied ${original} to ${copy}`);
     }
   });
 };

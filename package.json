@@ -4,7 +4,8 @@
   "description": "A Static Site Generator, 1% Inspired by Jurrasic Park, 99% Inspired by a yearning for knowledge.",
   "main": "app.js",
   "scripts": {
-    "build": "nodemon -e md,html,js,css --watch src --watch content --watch templates src/build.js"
+    "build": "node src/build.js",
+    "watch": "nodemon -e md,html,js,css --watch src --watch content --watch templates src/build.js"
   },
   "author": "Jordan Vidrine",
   "license": "ISC",
