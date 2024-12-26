@@ -30,7 +30,7 @@ async function assemblePages(filesToRender) {
       view = {
         title: page.options.title,
         content: page.content,
-        style: `./assets/css/${page.options.style}.css`,
+        style: `../assets/css/${page.options.style}.css`,
         // if maxPosts doesnt exist, render all blog posts
         posts: maxPosts ? Array.from(posts).splice(0, maxPosts) : posts,
       };
@@ -55,7 +55,7 @@ async function assemblePages(filesToRender) {
     pagesArray.push({
       output,
       filePath,
-      stylesheet: page.options.style,
+      stylesheet: `./assets/css/${page.options.style}.css`,
     });
   }
   return pagesArray;
