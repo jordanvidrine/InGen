@@ -11,10 +11,9 @@
   "dependencies": {
     "express": "^4.17.1",
     "fs-extra": "^8.1.0",
-    "markdown-it": "^9.1.0",
+    "markdown-it": "^14.1.0",
     "mustache": "^3.0.3",
-    "nodemon": "^1.19.2"
+    "nodemon": "^3.1.9"
   },
-  "repository": "https://github.com/jordanvidrine/InGen.git",
-  "devDependencies": {}
+  "repository": "https://github.com/jordanvidrine/InGen.git"
 }

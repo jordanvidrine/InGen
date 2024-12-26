@@ -1,23 +1,19 @@
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
   <head>
-    <meta charset="utf-8">
+    <meta charset="utf-8" />
     <title>{{title}}</title>
-    <link rel="stylesheet" href='.{{style}}'>
+    <link rel="stylesheet" href=".{{style}}" />
   </head>
   <body>
-    <div class="nav">
-      <a href="../index.html">Home</a>
-    </div>
-    <div class='posts'>
+    {{> nav}}
+    <div class="posts">
       {{#posts}}
-        <div class="post">
-          <h2>{{data.title}}</h2>
-          <p style="fontSize:10px">Written on {{data.date}}</p>
-          <div class='post-content'>
-            {{content}}
-          </div>
-        </div>
+      <div class="post">
+        <h2>{{data.title}}</h2>
+        <p style="fontsize: 10px">Written on {{data.date}}</p>
+        <div class="post-content">{{content}}</div>
+      </div>
       {{/posts}}
     </div>
   </body>
