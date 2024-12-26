@@ -75,20 +75,16 @@ async function getPosts() {
 
       let year = postData.date.split("-")[postData.date.split("-").length - 1];
       let month = postData.date.split("-")[0];
+      let title = postData.title.replace(/\s+/g, "-");
 
-      let fileName = `./_site/blog/${year}/${month}/${
-        postData.date
-      }-${postData.title.replace(" ", "-")}.html`;
+      let fileName = `./_site/blog/${year}/${month}/${title}.html`;
 
       postData = { ...postData, fileName };
 
       // replace posts that contain readmore with the link to the main post
       shortenedContent = postContent.replace(
         /(&lt;!--read more--&gt;)([\w\d\s\W\D\S])*/g,
-        `<a href="./${year}/${month}/${postData.date}-${postData.title.replace(
-          " ",
-          "-"
-        )}.html">Read more!</a>`
+        `<a href="./${year}/${month}/${title}.html">Read more!</a>`
       );
 
       postsContent.push({
