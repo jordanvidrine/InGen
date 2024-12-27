@@ -1,5 +1,7 @@
-const MarkdownIt = require("markdown-it")();
+const MarkdownIt = require("markdown-it");
 const fs = require("fs-extra");
+
+const md = MarkdownIt({ html: true });
 
 // returns an object containing section titles as keys, and their corresponding
 // rendered markdown to html text
@@ -17,7 +19,7 @@ async function getSectionContent() {
           `./content/sections/${section}`,
           "utf8"
         );
-        let renderedContent = MarkdownIt.render(rawContent);
+        let renderedContent = md.render(rawContent);
         let html = "<section>" + renderedContent + "</section>";
         sectionContent[`${section.split(".")[0]}`] = html;
       }
@@ -71,7 +73,7 @@ async function getPosts() {
       // removing front matter from content
       postContent = postContent.replace(/(---\r?\n)(.*\r?\n)*(---\r?\n)/, "");
       // render to html
-      postContent = MarkdownIt.render(postContent);
+      postContent = md.render(postContent);
 
       let year = postData.date.split("-")[postData.date.split("-").length - 1];
       let month = postData.date.split("-")[0];
@@ -83,14 +85,14 @@ async function getPosts() {
 
       // replace posts that contain readmore with the link to the main post
       shortenedContent = postContent.replace(
-        /(&lt;!--read more--&gt;)([\w\d\s\W\D\S])*/g,
+        /(&lt;--read more--&gt;)([\w\d\s\W\D\S])*/g,
         `<a href="./${year}/${month}/${title}.html">Read more!</a>`
       );
 
       postsContent.push({
         content: shortenedContent,
         fullContent: postContent.replace(
-          /(\n?\r?)(<p>)(&lt;!--read more--&gt;\n?\r?)(<\/p>)(\n?\r?)*/g,
+          /(\n?\r?)(<p>)(&lt;--read more--&gt;\n?\r?)(<\/p>)(\n?\r?)*/g,
           ""
         ),
         data: postData,
@@ -138,7 +140,7 @@ async function getPageContent(path) {
   // removing front matter from content
   content = content.replace(/(---\r?\n)(.*\r?\n)*(---\r?\n)/g, "");
   // rendering MD to html
-  content = MarkdownIt.render(content);
+  content = md.render(content);
 
   return {
     options,
